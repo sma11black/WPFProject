@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WpfProject.Properties
+namespace GettingThingsDone.Properties
 {
 
 
