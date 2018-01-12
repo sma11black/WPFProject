@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GettingThingsDone
+namespace Journal
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
@@ -22,7 +22,17 @@ namespace GettingThingsDone
     {
         public MainWindow()
         {
-            InitializeComponent();
+             InitializeComponent();
+        }
+
+        private void OnStartSearch_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+
+        private void OnStartSearch_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+
         }
     }
 }
