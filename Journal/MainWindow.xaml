@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Journal"
         mc:Ignorable="d" FontSize="16"
-        Title="Journal" Height="350" Width="525">
+        Title="Journal" Height="500" Width="800">
     <Window.Resources>
         <RoutedCommand x:Key="StartSearch" />
         <CollectionViewSource x:Key="sysFonts" Source="{x:Static Fonts.SystemFontFamilies}"/>
@@ -24,12 +24,7 @@
             <Slider Minimum="9" Maximum="72" Value="{Binding ElementName=content, Path=FontSize}" Width="100" />
             <ComboBox ItemsSource="{Binding Source={StaticResource sysFonts}}"
                       IsSynchronizedWithCurrentItem="True"
-                      SelectedItem="{Binding CurrentEncoding}">
-                <ComboBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel></VirtualizingStackPanel>
-                    </ItemsPanelTemplate>
-                </ComboBox.ItemsPanel>
+                      SelectedItem="{Binding CurrentFont}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding}" FontFamily="{Binding}" FontSize="16"></TextBlock>
@@ -52,7 +47,7 @@
             </ListBox>
         </StackPanel>
         <StackPanel Margin="10,0,0,0">
-            <GroupBox Header="header" x:Name="content">
+            <GroupBox Header="header" x:Name="content" FontFamily="{Binding Source={StaticResource sysFonts},Path=/}">
                 <TextBox Text="content" AcceptsReturn="True" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
             </GroupBox>
             <Button Content="保存" />

@@ -10,8 +10,8 @@ namespace Journal
 {
     class MainModel : INotifyPropertyChanged
     {
-        //public FontFamily CurrentFont { get { return _CurrentFont; } set { if (_CurrentFont == value) return; _CurrentFont = value; OnPropertyChanged(nameof(CurrentFont)); } }
-        //private FontFamily _CurrentFont = FontFamily.Default;
+        public FontFamily CurrentFont { get { return _CurrentFont; } set { if (_CurrentFont == value) return; _CurrentFont = value; OnPropertyChanged(nameof(CurrentFont)); } }
+        private FontFamily _CurrentFont = new FontFamily("Comic Sans MS");
 
         private void OnPropertyChanged(string aPropertyName)
         {

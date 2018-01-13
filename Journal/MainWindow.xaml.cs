@@ -22,8 +22,11 @@ namespace Journal
     {
         public MainWindow()
         {
-             InitializeComponent();
+            InitializeComponent();
+            _Model = new MainModel();
+            this.DataContext = _Model;
         }
+        private MainModel _Model;
 
         private void OnStartSearch_Executed(object sender, ExecutedRoutedEventArgs e)
         {
