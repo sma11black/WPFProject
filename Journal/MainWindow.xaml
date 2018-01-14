@@ -4,12 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Journal"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d" FontSize="16"
-        Title="Journal" Height="500" Width="800">
+        Title="Journal" Height="500" Width="820">
     <Window.Resources>
+        <!--路由命令-->
         <RoutedCommand x:Key="StartSearch" />
+        <!--静态资源 - 字体-->
         <CollectionViewSource x:Key="sysFonts" Source="{x:Static Fonts.SystemFontFamilies}"/>
+        <!--静态资源 - 颜色-->
+        <ObjectDataProvider MethodName="GetType" 
+                            ObjectType="{x:Type sys:Type}" x:Key="colorsTypeOdp">
+            <ObjectDataProvider.MethodParameters>
+                <sys:String>System.Windows.Media.Colors, PresentationCore, 
+                    Version=3.0.0.0, Culture=neutral, 
+                    PublicKeyToken=31bf3856ad364e35</sys:String>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider ObjectInstance="{StaticResource colorsTypeOdp}"  
+                        MethodName="GetProperties" x:Key="colorPropertiesOdp">
+        </ObjectDataProvider>
     </Window.Resources>
+    
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource StartSearch}"
                         Executed="OnStartSearch_Executed"
@@ -31,6 +47,19 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+            <ComboBox Name="colorCombo" HorizontalContentAlignment="Stretch"
+                      ItemsSource="{Binding Source={StaticResource colorPropertiesOdp}}"
+                      IsSynchronizedWithCurrentItem="True"
+                      SelectedItem="{Binding CurrentColor}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Fill="{Binding Name}" Margin="1 3" Height="10" Width="100"></Rectangle>
+                            <TextBlock Text="{Binding Name}" Margin="2 0"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Menu>
         <StackPanel DockPanel.Dock="Left"  Margin="0, 10, 0, 0" Background="LightGray"  Width="110">
             <ListBox BorderThickness="0">
@@ -47,8 +76,8 @@
             </ListBox>
         </StackPanel>
         <StackPanel Margin="10,0,0,0">
-            <GroupBox Header="header" x:Name="content" FontFamily="{Binding Source={StaticResource sysFonts},Path=/}">
-                <TextBox Text="content" AcceptsReturn="True" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+            <GroupBox Header="header" x:Name="content" FontFamily="{Binding Source={StaticResource sysFonts},Path=/}" Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}">
+                <TextBox Text="content" AcceptsReturn="True" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}"/>
             </GroupBox>
             <Button Content="保存" />
         </StackPanel>
