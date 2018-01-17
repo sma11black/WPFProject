@@ -37,6 +37,33 @@ namespace Journal
             }
         }
 
+        private void OnCreate_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+
+        private void OnCreate_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = _Model != null;
+        }
+
+        private void OnSave_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                _Model.Save();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void OnSave_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = _Model != null && _Model.CanSave;
+        }
+
         private void OnStartSearch_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             
@@ -44,7 +71,7 @@ namespace Journal
 
         private void OnStartSearch_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-
+            e.CanExecute = _Model != null && _Model.CanStartSearch;
         }
     }
 }

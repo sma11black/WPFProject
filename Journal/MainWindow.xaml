@@ -9,7 +9,10 @@
         Title="Journal" Height="500" Width="800">
     <Window.Resources>
         <!--路由命令-->
+        <RoutedCommand x:Key="Create" />
+        <RoutedCommand x:Key="Save" />
         <RoutedCommand x:Key="StartSearch" />
+
         <!--静态资源 - 字体-->
         <CollectionViewSource x:Key="sysFonts" Source="{x:Static Fonts.SystemFontFamilies}"/>
         <!--静态资源 - 颜色-->
@@ -27,13 +30,19 @@
     </Window.Resources>
     
     <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource Create}"
+                        Executed="OnCreate_Executed"
+                        CanExecute="OnCreate_CanExecute" />
+        <CommandBinding Command="{StaticResource Save}"
+                        Executed="OnSave_Executed"
+                        CanExecute="OnSave_CanExecute" />
         <CommandBinding Command="{StaticResource StartSearch}"
                         Executed="OnStartSearch_Executed"
                         CanExecute="OnStartSearch_CanExecute" />
     </Window.CommandBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="新建"/>
+            <MenuItem Header="新建" Command="{StaticResource Create}" />
             <Label Content="查找条件:"/>
             <TextBox Text="{Binding Pattern1}" MinWidth="100"/>
             <Button Content="开始查找" Command="{StaticResource StartSearch}"/>
@@ -67,7 +76,7 @@
             <ListBox Name="diaryListBox"
                      BorderThickness="0"
                      ItemsSource="{Binding Diaries}"
-                     SelectedIndex="{Binding SelectedIndex, UpdateSourceTrigger=PropertyChanged}">
+                     SelectedIndex="{Binding SelectedIndex}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -80,14 +89,19 @@
                 <!--<ListBoxItem Content="2018-01-12" Background="LightGray"/>-->
             </ListBox>
         </StackPanel>
-        <StackPanel Margin="10,0,0,0">
+        <StackPanel Margin="10,0,5,10">
             <GroupBox Header="{Binding SeletedDiary.Timestamp}" 
                       x:Name="content" 
                       FontFamily="{Binding Source={StaticResource sysFonts},Path=/}" 
                       Foreground="{Binding CurrentColor}">
-                <TextBox Text="{Binding SeletedDiary.Content}" AcceptsReturn="True" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}"/>
+                <TextBox Text="{Binding TargetText, UpdateSourceTrigger=PropertyChanged}" 
+                         AcceptsReturn="True" TextWrapping="Wrap" 
+                         HorizontalScrollBarVisibility="Auto" 
+                         VerticalScrollBarVisibility="Auto" 
+                         Height="350"
+                         Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}"/>
             </GroupBox>
-            <Button Content="保存" Click="OnSave_Click"/>
+            <Button Content="保存" Command="{StaticResource Save}"/>
         </StackPanel>
     </DockPanel>
 </Window>

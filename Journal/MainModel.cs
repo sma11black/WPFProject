@@ -31,13 +31,14 @@ namespace Journal
             DataContext.Diary.InsertOnSubmit(aNewDiary);
         }
 
-        public void GetDiaryList()
+        public void Save()
         {
-            var aDiaries = from r in DataContext.Diary select r;
-            foreach (Diary aDiary in aDiaries)
+            Diary aDiary = (from r in DataContext.Diary where r.Id == SeletedDiary.Id select r).FirstOrDefault();
+            if (aDiary != null)
             {
-                ;
+                aDiary.Content = TargetText;
             }
+            Submit();
         }
 
         public void Submit()
@@ -45,7 +46,37 @@ namespace Journal
             DataContext.SubmitChanges();
         }
 
-        public int SelectedIndex {
+        public bool CanStartSearch
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(Pattern) && !string.IsNullOrWhiteSpace(TargetText);
+            }
+        }
+
+        public bool CanSave
+        {
+            get
+            {
+                return TargetText != null && SeletedDiary != null && !TargetText.Equals(SeletedDiary.Content);
+            }
+        }
+
+        public string Pattern
+        {
+            get { return _Pattern; }
+            set
+            {
+                if (_Pattern == value) return; _Pattern = value; OnPropertyChanged(nameof(Pattern));
+            }
+        }
+        private string _Pattern;
+
+        public string TargetText { get { return _TargetText; } set { if (_TargetText == value) return; _TargetText = value; OnPropertyChanged(nameof(TargetText)); } }
+        private string _TargetText;
+
+        public int SelectedIndex
+        {
             get
             {
                 return _SelectedIndex;
@@ -55,10 +86,11 @@ namespace Journal
                 if (_SelectedIndex == value) return;
                 _SelectedIndex = value;
                 SeletedDiary = Diaries.ElementAtOrDefault(value);
+                TargetText = SeletedDiary.Content;
                 OnPropertyChanged(nameof(SelectedIndex));
             }
         }
-        private int _SelectedIndex = 0;
+        private int _SelectedIndex = -1;
 
         public Diary SeletedDiary { get { return _SeletedDiary; } set { if (_SeletedDiary == value) return; _SeletedDiary = value; OnPropertyChanged(nameof(SeletedDiary)); } }
         private Diary _SeletedDiary = new Diary { Id = 0, Content = "Please Selete A Diary Or Create A New Diary.", Timestamp = DateTime.Now };
