@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Journal
 {
@@ -38,7 +39,7 @@ namespace Journal
 
         private void OnStartSearch_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-
+            
         }
 
         private void OnStartSearch_CanExecute(object sender, CanExecuteRoutedEventArgs e)

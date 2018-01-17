@@ -40,7 +40,8 @@
             <Slider Minimum="9" Maximum="72" Value="{Binding ElementName=content, Path=FontSize}" Width="100" />
             <ComboBox ItemsSource="{Binding Source={StaticResource sysFonts}}"
                       IsSynchronizedWithCurrentItem="True"
-                      SelectedItem="{Binding CurrentFont}">
+                      SelectedValuePath="Source"
+                      SelectedValue="{Binding CurrentFont}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding}" FontFamily="{Binding}" FontSize="16"></TextBlock>
@@ -50,7 +51,8 @@
             <ComboBox Name="colorCombo" HorizontalContentAlignment="Stretch"
                       ItemsSource="{Binding Source={StaticResource colorPropertiesOdp}}"
                       IsSynchronizedWithCurrentItem="True"
-                      SelectedItem="{Binding CurrentColor}">
+                      SelectedValuePath="Name"
+                      SelectedValue="{Binding CurrentColor}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -61,23 +63,29 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </Menu>
-        <StackPanel DockPanel.Dock="Left"  Margin="0, 10, 0, 0" Background="LightGray"  Width="110">
-            <ListBox BorderThickness="0">
-                <ListBoxItem Content="2018-01-12" Background="LightGray"/>
-                <ListBoxItem Content="2018-01-13" Background="LightGray"/>
-                <ListBoxItem Content="2018-01-14" Background="LightGray"/>
-                <ListBoxItem Content="2018-01-15" Background="LightGray"/>
-                <ListBoxItem Content="2018-01-16" Background="LightGray"/>
-                <ListBoxItem Content="2018-01-17" Background="LightGray"/>
-                <ListBoxItem Content="2018-01-18" Background="LightGray"/>
-                <ListBoxItem Content="2018-01-19" Background="LightGray"/>
-                <ListBoxItem Content="2018-01-20" Background="LightGray"/>
-                <ListBoxItem Content="2018-01-21" Background="LightGray"/>
+        <StackPanel DockPanel.Dock="Left"  Margin="0, 10, 0, 0" Width="200">
+            <ListBox Name="diaryListBox"
+                     BorderThickness="0"
+                     ItemsSource="{Binding Diaries}"
+                     SelectedIndex="{Binding SelectedIndex, UpdateSourceTrigger=PropertyChanged}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="{Binding Timestamp}"
+                                   Background="LightGray" 
+                                   Width="180"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <!--<ListBoxItem Content="2018-01-12" Background="LightGray"/>-->
             </ListBox>
         </StackPanel>
         <StackPanel Margin="10,0,0,0">
-            <GroupBox Header="header" x:Name="content" FontFamily="{Binding Source={StaticResource sysFonts},Path=/}" Foreground="{Binding CurrentColor}">
-                <TextBox Text="content" AcceptsReturn="True" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}"/>
+            <GroupBox Header="{Binding SeletedDiary.Timestamp}" 
+                      x:Name="content" 
+                      FontFamily="{Binding Source={StaticResource sysFonts},Path=/}" 
+                      Foreground="{Binding CurrentColor}">
+                <TextBox Text="{Binding SeletedDiary.Content}" AcceptsReturn="True" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}"/>
             </GroupBox>
             <Button Content="保存" Click="OnSave_Click"/>
         </StackPanel>
