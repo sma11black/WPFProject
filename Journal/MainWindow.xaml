@@ -48,7 +48,7 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="新建" Command="{StaticResource Create}" />
             <Label Content="查找条件:"/>
-            <TextBox Text="{Binding Pattern1}" MinWidth="100"/>
+            <TextBox Text="{Binding Pattern, UpdateSourceTrigger=PropertyChanged}" MinWidth="100"/>
             <Button Content="开始查找" Command="{StaticResource StartSearch}"/>
             <Slider Minimum="9" Maximum="52" Value="{Binding ElementName=content, Path=FontSize}" Width="100" />
             <ComboBox ItemsSource="{Binding Source={StaticResource sysFonts}}"
@@ -98,12 +98,43 @@
                       x:Name="content" 
                       FontFamily="{Binding Source={StaticResource sysFonts},Path=/}" 
                       Foreground="{Binding CurrentColor}">
-                <TextBox Text="{Binding TargetText, UpdateSourceTrigger=PropertyChanged}" 
-                         AcceptsReturn="True" TextWrapping="Wrap" 
-                         HorizontalScrollBarVisibility="Auto" 
-                         VerticalScrollBarVisibility="Auto" 
-                         Height="300"
-                         Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}"/>
+                <!--<Grid>-->
+                    <!--滚动条问题：只能有一个会滚动-->
+                    <!--TextBlock用于显示以支持高亮文本--><!--
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <TextBlock LineHeight="1"
+                               x:Name="tbk"
+                               Text="{Binding ElementName=tbx,Path=Text}"
+                               Padding="4,3,0,0"
+                               TextWrapping="Wrap"
+                               Height="300"
+                               FontFamily="{Binding Source={StaticResource sysFonts},Path=/}"
+                               Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}"/>
+                    </ScrollViewer>
+                    --><!--TextBox用于编辑文本,设置为透明不显示--><!--
+                    <TextBox x:Name="tbx"
+                             Text="{Binding TargetText, UpdateSourceTrigger=PropertyChanged}" 
+                             TextChanged="tbx_TextChanged" SizeChanged="tbx_SizeChanged"
+                             AcceptsReturn="True" TextWrapping="Wrap"
+                             HorizontalScrollBarVisibility="Auto"
+                             VerticalScrollBarVisibility="Auto"
+                             Background="Transparent"
+                             Foreground="#00000000"
+                             BorderBrush="#00000000"
+                             Height="300"/>-->
+                <!--</Grid>-->
+                <RichTextBox x:Name="rtb"
+                             Height="300"
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Auto"
+                             FontFamily="{Binding Source={StaticResource sysFonts},Path=/}"
+                             Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text="{Binding TargetText, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
             </GroupBox>
             <UniformGrid Columns="2">
                 <Button Content="保存" Command="{StaticResource Save}" Width="80"/>

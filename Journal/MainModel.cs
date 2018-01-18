@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Linq;
 using System.Linq;
-using System.Windows;
-using System.Windows.Media;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace Journal
 {
@@ -22,6 +22,43 @@ namespace Journal
             // Check
             if (!DataContext.DatabaseExists()) throw new ApplicationException("数据库不存在！");
             DataContext.Diary.FirstOrDefault();
+        }
+
+        public IEnumerable<TextRange> GetAllWordRanges(FlowDocument document)
+        {
+            // string pattern = @"[^\W\d](\w|[-']{1,2}(?=\w))*";
+            Regex aRegex = new Regex(Pattern);
+            TextPointer pointer = document.ContentStart;
+            while (pointer != null)
+            {
+                if (pointer.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text)
+                {
+                    string textRun = pointer.GetTextInRun(LogicalDirection.Forward);
+                    //MatchCollection matches = Regex.Matches(textRun, pattern);
+                    MatchCollection aMatches = aRegex.Matches(textRun);
+                    foreach (Match aMatch in aMatches)
+                    {
+                        int startIndex = aMatch.Index;
+                        int length = aMatch.Length;
+                        TextPointer start = pointer.GetPositionAtOffset(startIndex);
+                        TextPointer end = start.GetPositionAtOffset(length);
+                        // 验证选中的文本匹配
+                        //TextRange aTextRange = new TextRange(start, end);
+                        //if (aRegex.IsMatch(aTextRange.Text)) { yield return new TextRange(start, end); }
+                        yield return new TextRange(start, end);
+                    }
+                }
+
+                pointer = pointer.GetNextContextPosition(LogicalDirection.Forward);
+            }
+        }
+
+        public void GetMatches()
+        {
+            Regex aRegex = new Regex(Pattern);
+            //Matches = aRegex.Matches(TargetText);
+            MatchCollection aMatches = aRegex.Matches(TargetText);
+
         }
 
         public void Insert()
