@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
@@ -24,41 +25,22 @@ namespace Journal
             DataContext.Diary.FirstOrDefault();
         }
 
-        public IEnumerable<TextRange> GetAllWordRanges(FlowDocument document)
+        public class MatchView
         {
-            // string pattern = @"[^\W\d](\w|[-']{1,2}(?=\w))*";
-            Regex aRegex = new Regex(Pattern);
-            TextPointer pointer = document.ContentStart;
-            while (pointer != null)
-            {
-                if (pointer.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text)
-                {
-                    string textRun = pointer.GetTextInRun(LogicalDirection.Forward);
-                    //MatchCollection matches = Regex.Matches(textRun, pattern);
-                    MatchCollection aMatches = aRegex.Matches(textRun);
-                    foreach (Match aMatch in aMatches)
-                    {
-                        int startIndex = aMatch.Index;
-                        int length = aMatch.Length;
-                        TextPointer start = pointer.GetPositionAtOffset(startIndex);
-                        TextPointer end = start.GetPositionAtOffset(length);
-                        // 验证选中的文本匹配
-                        //TextRange aTextRange = new TextRange(start, end);
-                        //if (aRegex.IsMatch(aTextRange.Text)) { yield return new TextRange(start, end); }
-                        yield return new TextRange(start, end);
-                    }
-                }
-
-                pointer = pointer.GetNextContextPosition(LogicalDirection.Forward);
-            }
+            public int Index { get; set; }
+            public string Value { get; set; }
         }
 
         public void GetMatches()
         {
             Regex aRegex = new Regex(Pattern);
-            //Matches = aRegex.Matches(TargetText);
             MatchCollection aMatches = aRegex.Matches(TargetText);
-
+            List<MatchView> aMatchViews = new List<MatchView>();
+            for (int i = 0; i < aMatches.Count; i++)
+            {
+                aMatchViews.Add(new MatchView { Index = i, Value = aMatches[i].Value });
+            }
+            Matches = aMatchViews;
         }
 
         public void Insert()
@@ -131,6 +113,9 @@ namespace Journal
             }
         }
         private string _Pattern;
+
+        public List<MatchView> Matches { get { return _Matches; } private set { if (_Matches == value) return; _Matches = value; OnPropertyChanged(nameof(Matches)); } }
+        private List<MatchView> _Matches;
 
         public string TargetText { get { return _TargetText; } set { if (_TargetText == value) return; _TargetText = value; OnPropertyChanged(nameof(TargetText)); } }
         private string _TargetText = "请在左侧选择一个日记 或 点击新建以添加日记.";

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Journal"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d" FontSize="16"
-        Title="Journal" Height="500" Width="800">
+        Title="Journal" Height="600" Width="1000">
     <Window.Resources>
         <!--路由命令-->
         <RoutedCommand x:Key="Create" />
@@ -93,53 +93,37 @@
                 <!--<ListBoxItem Content="2018-01-12" Background="LightGray"/>-->
             </ListBox>
         </StackPanel>
-        <StackPanel Margin="10,10,5,10">
+        <StackPanel Margin="10,10,5,10" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <GroupBox Header="{Binding SeletedDiary.Timestamp}" 
                       x:Name="content" 
                       FontFamily="{Binding Source={StaticResource sysFonts},Path=/}" 
                       Foreground="{Binding CurrentColor}">
-                <!--<Grid>-->
-                    <!--滚动条问题：只能有一个会滚动-->
-                    <!--TextBlock用于显示以支持高亮文本--><!--
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <TextBlock LineHeight="1"
-                               x:Name="tbk"
-                               Text="{Binding ElementName=tbx,Path=Text}"
-                               Padding="4,3,0,0"
-                               TextWrapping="Wrap"
-                               Height="300"
-                               FontFamily="{Binding Source={StaticResource sysFonts},Path=/}"
-                               Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}"/>
-                    </ScrollViewer>
-                    --><!--TextBox用于编辑文本,设置为透明不显示--><!--
-                    <TextBox x:Name="tbx"
-                             Text="{Binding TargetText, UpdateSourceTrigger=PropertyChanged}" 
-                             TextChanged="tbx_TextChanged" SizeChanged="tbx_SizeChanged"
-                             AcceptsReturn="True" TextWrapping="Wrap"
-                             HorizontalScrollBarVisibility="Auto"
-                             VerticalScrollBarVisibility="Auto"
-                             Background="Transparent"
-                             Foreground="#00000000"
-                             BorderBrush="#00000000"
-                             Height="300"/>-->
-                <!--</Grid>-->
-                <RichTextBox x:Name="rtb"
-                             Height="300"
-                             VerticalScrollBarVisibility="Auto"
-                             HorizontalScrollBarVisibility="Auto"
-                             FontFamily="{Binding Source={StaticResource sysFonts},Path=/}"
-                             Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}">
-                    <FlowDocument>
-                        <Paragraph>
-                            <Run Text="{Binding TargetText, UpdateSourceTrigger=PropertyChanged}"/>
-                        </Paragraph>
-                    </FlowDocument>
-                </RichTextBox>
+                <TextBox Text="{Binding TargetText, UpdateSourceTrigger=PropertyChanged}"
+                         AcceptsReturn="True" TextWrapping="Wrap"
+                         HorizontalScrollBarVisibility="Auto"
+                         VerticalScrollBarVisibility="Auto"
+                         Height="300"
+                         Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}"/>
             </GroupBox>
             <UniformGrid Columns="2">
                 <Button Content="保存" Command="{StaticResource Save}" Width="80"/>
                 <Button Content="删除" Command="{StaticResource Delete}" Width="80"/>
             </UniformGrid>
+            <GroupBox Header="Matches">
+                <ListBox ItemsSource="{Binding Matches}"
+                     Margin="0, 10, 0, 0" Height="150"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <WrapPanel>
+                                <TextBlock Text="{Binding Index}" />
+                                <TextBlock Text=": " />
+                                <TextBlock Text="{Binding Value}" />
+                            </WrapPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </GroupBox>
         </StackPanel>
     </DockPanel>
 </Window>
