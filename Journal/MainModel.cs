@@ -128,10 +128,16 @@ namespace Journal
             }
             set
             {
-                //if (value < 0 || value >= Diaries.Count) return;
                 if (_SelectedIndex == value) return;
                 _SelectedIndex = value;
-                SeletedDiary = Diaries.ElementAtOrDefault(value);
+                if(value == -1)
+                {
+                    SeletedDiary = new Diary { Id = -1, Content = "请在左侧选择一个日记 或 点击新建以添加日记.", Timestamp = DateTime.Now };
+                }
+                else
+                {
+                    SeletedDiary = Diaries.ElementAtOrDefault(value);
+                }
                 TargetText = SeletedDiary.Content;
                 OnPropertyChanged(nameof(SelectedIndex));
             }
@@ -139,7 +145,7 @@ namespace Journal
         private int _SelectedIndex = -1;
 
         public Diary SeletedDiary { get { return _SeletedDiary; } set { if (_SeletedDiary == value) return; _SeletedDiary = value; OnPropertyChanged(nameof(SeletedDiary)); } }
-        private Diary _SeletedDiary = new Diary { Id = -1, Content = "", Timestamp = DateTime.Now };
+        private Diary _SeletedDiary = new Diary { Id = -1, Content = "请在左侧选择一个日记 或 点击新建以添加日记.", Timestamp = DateTime.Now };
 
         public List<Diary> Diaries => DataContext.Diary.OrderByDescending(e => e.Timestamp).ToList();
 
