@@ -25,21 +25,16 @@ namespace Journal
         }
         private MainModel _Model;
 
-        private void OnSave_Click(object sender, RoutedEventArgs e)
+        private void OnCreate_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             try
             {
-                _Model.Submit();
+                _Model.Insert();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        private void OnCreate_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-
         }
 
         private void OnCreate_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -72,6 +67,24 @@ namespace Journal
         private void OnStartSearch_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = _Model != null && _Model.CanStartSearch;
+        }
+
+        private void OnDelete_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                _Model.Delete();
+                // 默认选中下一个
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void OnDelete_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = _Model != null && _Model.CanDelete;
         }
     }
 }

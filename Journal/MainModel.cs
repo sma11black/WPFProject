@@ -24,11 +24,14 @@ namespace Journal
             DataContext.Diary.FirstOrDefault();
         }
 
-        public void Insert(string DiaryContent)
+        public void Insert()
         {
             DateTime Now = DateTime.Now;
-            Diary aNewDiary = new Diary { Content = DiaryContent, Timestamp = Now };
+            Diary aNewDiary = new Diary { Content = "", Timestamp = Now };
             DataContext.Diary.InsertOnSubmit(aNewDiary);
+            Submit();
+            // 默认应该选中第一个
+            SelectedIndex = 0;
         }
 
         public void Save()
@@ -41,9 +44,21 @@ namespace Journal
             Submit();
         }
 
+
+        internal void Delete()
+        {
+            Diary aDiary = (from r in DataContext.Diary where r.Id == SeletedDiary.Id select r).FirstOrDefault();
+            if (aDiary != null)
+            {
+                DataContext.Diary.DeleteOnSubmit(aDiary);
+            }
+            Submit();
+        }
+
         public void Submit()
         {
             DataContext.SubmitChanges();
+            OnPropertyChanged(nameof(Diaries));
         }
 
         public bool CanStartSearch
@@ -58,7 +73,15 @@ namespace Journal
         {
             get
             {
-                return TargetText != null && SeletedDiary != null && !TargetText.Equals(SeletedDiary.Content);
+                return TargetText != null && SelectedIndex!=-1 && SeletedDiary != null && !TargetText.Equals(SeletedDiary.Content);
+            }
+        }
+
+        public bool CanDelete
+        {
+            get
+            {
+                return SelectedIndex != -1 && SeletedDiary != null;
             }
         }
 
@@ -73,7 +96,7 @@ namespace Journal
         private string _Pattern;
 
         public string TargetText { get { return _TargetText; } set { if (_TargetText == value) return; _TargetText = value; OnPropertyChanged(nameof(TargetText)); } }
-        private string _TargetText;
+        private string _TargetText = "请在左侧选择一个日记 或 点击新建以添加日记.";
 
         public int SelectedIndex
         {
@@ -83,6 +106,7 @@ namespace Journal
             }
             set
             {
+                //if (value < 0 || value >= Diaries.Count) return;
                 if (_SelectedIndex == value) return;
                 _SelectedIndex = value;
                 SeletedDiary = Diaries.ElementAtOrDefault(value);
@@ -93,7 +117,7 @@ namespace Journal
         private int _SelectedIndex = -1;
 
         public Diary SeletedDiary { get { return _SeletedDiary; } set { if (_SeletedDiary == value) return; _SeletedDiary = value; OnPropertyChanged(nameof(SeletedDiary)); } }
-        private Diary _SeletedDiary = new Diary { Id = 0, Content = "Please Selete A Diary Or Create A New Diary.", Timestamp = DateTime.Now };
+        private Diary _SeletedDiary = new Diary { Id = -1, Content = "", Timestamp = DateTime.Now };
 
         public List<Diary> Diaries => DataContext.Diary.OrderByDescending(e => e.Timestamp).ToList();
 

@@ -11,6 +11,7 @@
         <!--路由命令-->
         <RoutedCommand x:Key="Create" />
         <RoutedCommand x:Key="Save" />
+        <RoutedCommand x:Key="Delete" />
         <RoutedCommand x:Key="StartSearch" />
 
         <!--静态资源 - 字体-->
@@ -36,6 +37,9 @@
         <CommandBinding Command="{StaticResource Save}"
                         Executed="OnSave_Executed"
                         CanExecute="OnSave_CanExecute" />
+        <CommandBinding Command="{StaticResource Delete}"
+                        Executed="OnDelete_Executed"
+                        CanExecute="OnDelete_CanExecute" />
         <CommandBinding Command="{StaticResource StartSearch}"
                         Executed="OnStartSearch_Executed"
                         CanExecute="OnStartSearch_CanExecute" />
@@ -46,7 +50,7 @@
             <Label Content="查找条件:"/>
             <TextBox Text="{Binding Pattern1}" MinWidth="100"/>
             <Button Content="开始查找" Command="{StaticResource StartSearch}"/>
-            <Slider Minimum="9" Maximum="72" Value="{Binding ElementName=content, Path=FontSize}" Width="100" />
+            <Slider Minimum="9" Maximum="52" Value="{Binding ElementName=content, Path=FontSize}" Width="100" />
             <ComboBox ItemsSource="{Binding Source={StaticResource sysFonts}}"
                       IsSynchronizedWithCurrentItem="True"
                       SelectedValuePath="Source"
@@ -89,7 +93,7 @@
                 <!--<ListBoxItem Content="2018-01-12" Background="LightGray"/>-->
             </ListBox>
         </StackPanel>
-        <StackPanel Margin="10,0,5,10">
+        <StackPanel Margin="10,10,5,10">
             <GroupBox Header="{Binding SeletedDiary.Timestamp}" 
                       x:Name="content" 
                       FontFamily="{Binding Source={StaticResource sysFonts},Path=/}" 
@@ -98,10 +102,13 @@
                          AcceptsReturn="True" TextWrapping="Wrap" 
                          HorizontalScrollBarVisibility="Auto" 
                          VerticalScrollBarVisibility="Auto" 
-                         Height="350"
+                         Height="300"
                          Foreground="{Binding Source={StaticResource colorPropertiesOdp}, Path=Name}"/>
             </GroupBox>
-            <Button Content="保存" Command="{StaticResource Save}"/>
+            <UniformGrid Columns="2">
+                <Button Content="保存" Command="{StaticResource Save}" Width="80"/>
+                <Button Content="删除" Command="{StaticResource Delete}" Width="80"/>
+            </UniformGrid>
         </StackPanel>
     </DockPanel>
 </Window>
