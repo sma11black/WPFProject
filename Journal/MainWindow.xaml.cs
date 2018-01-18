@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Collections.Generic;
-using System.Windows.Media;
 
 namespace Journal
 {
@@ -19,14 +15,13 @@ namespace Journal
             try
             {
                 _Model = new MainModel();
-                this.DataContext = _Model;
-                
-                
+                _Model.LoadConfig();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+            this.DataContext = _Model;
         }
         private MainModel _Model;
 
@@ -96,6 +91,36 @@ namespace Journal
         private void OnDelete_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = _Model != null && _Model.CanDelete;
+        }
+
+        private void OnClosed(object sender, EventArgs e)
+        {
+            try
+            {
+                _Model.SavaConfig();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void OnOpen_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                _Model.ReadXmlFile();
+                MessageBox.Show(_Model.ConfigString);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void OnOpen_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = _Model != null && _Model.CanOpen;
         }
     }
 }
