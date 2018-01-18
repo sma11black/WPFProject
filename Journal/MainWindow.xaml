@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Journal"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        mc:Ignorable="d" FontSize="16"  Closed="OnClosed"
-        Title="Journal" Height="600" Width="1000">
+        mc:Ignorable="d" Icon="Diary.png"
+        Closed="OnClosed"
+        Title="Journal" Height="650" Width="1000" FontSize="16"  >
     <Window.Resources>
         <!--路由命令-->
         <RoutedCommand x:Key="Create" />

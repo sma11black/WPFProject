@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Class="DiaryDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Table Name="" Member="Diary">
     <Type Name="Diary">
-      <Column Member="Id" Type="System.Int32" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Member="Content" Type="System.String" CanBeNull="false" />
-      <Column Member="Timestamp" Type="System.DateTime" DbType="datetime" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int32" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Content" Type="System.String" CanBeNull="false" />
+      <Column Name="Timestamp" Type="System.DateTime" DbType="datetime" CanBeNull="false" />
     </Type>
   </Table>
 </Database>
